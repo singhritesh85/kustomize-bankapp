@@ -42,26 +42,3 @@ spec:
         requests:
           storage: 1Gi 
       storageClassName: dexter
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql-headless
-  labels:
-    app: mysql
-spec:
-  ports:
-  - port: 3306
-    name: mysql
-  clusterIP: None # Headless service
-  selector:
-    app: mysql
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: mysql-secret
-type: Opaque
-data:
-  password: RGV4dGVyQDEyMw==
-  database: YmFua2FwcGRi
