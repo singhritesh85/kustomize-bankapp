@@ -20,6 +20,13 @@ spec:
         ports:
         - containerPort: 3306
           name: mysql
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
         securityContext:
           privileged: false                # Container does not have full root privileges on the host system
           allowPrivilegeEscalation: false  # Prevents processes within the container from gaining more privileges than their parent process
