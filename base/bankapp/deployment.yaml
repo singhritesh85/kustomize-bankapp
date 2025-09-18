@@ -19,6 +19,13 @@ spec:
         image: 027330342406.dkr.ecr.us-east-2.amazonaws.com/bankapp:1.0.1
         ports:
         - containerPort: 8080
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "256m"
+          limits:
+            memory: "256Mi"
+            cpu: "512m"
         imagePullPolicy: Always
         securityContext:
           privileged: false                # Container does not have full root privileges on the host system
