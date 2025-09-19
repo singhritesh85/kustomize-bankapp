@@ -29,5 +29,5 @@ stages:
               kubernetesCluster: 'bankapp-cluster'
               namespace: 'mysql'
               command: 'apply'
-              arguments: '-k $(System.DefaultWorkingDirectory)/overlay/mysql/kustomization.yaml'
+              arguments: '-k $(System.DefaultWorkingDirectory)/overlay/mysql'
               containerRegistryType: 'Azure Container Registry'
