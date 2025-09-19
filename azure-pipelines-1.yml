@@ -1,0 +1,75 @@
+trigger:
+- none
+
+pr: none
+pool:
+  name: demo
+  demands:
+  - agent.name -equals demo
+
+stages:
+- stage: "CloneandBuild"
+  displayName: CloneandBuild
+  jobs:
+  - job: "CloneandBuild"
+    displayName: CloneandBuild
+    steps:
+    - checkout: self 
+    - script: |
+        echo "Cloning the external GitHub repository"
+        git clone -b main https://$GITACCOUNT_USER:$GITACCOUNT_PAT@github.com/singhritesh85/Bank-App-Kustomize.git
+    steps:
+    - task: Maven@4
+      inputs:
+        mavenPomFile: 'Bank-App-Kustomize/pom.xml'
+        goals: 'clean install'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
+- stage: DockerImageBuild
+  displayName: DockerImageBuild
+  dependsOn: "CloneandBuild"
+  jobs:
+  - job: DockerImageBuild
+    displayName: DockerImageBuild
+    steps:
+    - checkout: none
+    - task: CmdLine@2
+      inputs:
+        script: |
+          docker system prune -f --all
+          docker build -t bankappcontainer24registry.azurecr.io/samplewebapp:1.0.1 -f Bank-App-Kustomize/Dockerfile-Project-1 .
+          trivy image --exit-code 0 --severity MEDIUM,HIGH bankappcontainer24registry.azurecr.io/samplewebapp:1.0.1
+          #trivy image --exit-code 1 --severity CRITICAL bankappcontainer24registry.azurecr.io/samplewebapp:1.0.1
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Docker-Registry'
+        repository: 'samplewebapp'
+        command: 'buildAndPush'
+        Dockerfile: '**/Bank-App-Kustomize/Dockerfile-Project-1'
+        tags: 'latest'
+- stage: KubernetesDeployment
+  displayName: KubernetesDeployment
+  dependsOn: DockerImageBuild
+  jobs:
+  - deployment: KubernetesDeployment
+    displayName: KubernetesDeployment
+    environment: "stage"
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: none 
+          - task: Kubernetes@1
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscriptionEndpoint: 'Azure DevOps Service Connection'
+              azureResourceGroup: 'bankapp-rg'
+              kubernetesCluster: 'bankapp-cluster'
+              namespace: 'bankapp'
+              command: 'apply'
+              arguments: '-k $(System.DefaultWorkingDirectory)/overlay/bankapp'
+              containerRegistryType: 'Azure Container Registry'
