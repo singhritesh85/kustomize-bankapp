@@ -18,7 +18,6 @@ stages:
     - script: |
         echo "Cloning the external GitHub repository"
         git clone -b main https://$GITACCOUNT_USER:$GITACCOUNT_PAT@github.com/singhritesh85/Bank-App-Kustomize.git
-    steps:
     - task: Maven@4
       inputs:
         mavenPomFile: 'Bank-App-Kustomize/pom.xml'
