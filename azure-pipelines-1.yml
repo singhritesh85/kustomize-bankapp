@@ -49,7 +49,8 @@ stages:
         repository: 'samplewebapp'
         command: 'buildAndPush'
         Dockerfile: '**/Bank-App-Kustomize/Dockerfile-Project-1'
-        tags: 'latest'
+        buildContext: '**/Bank-App-Kustomize/'
+        tags: '1.0.1'
 - stage: KubernetesDeployment
   displayName: KubernetesDeployment
   dependsOn: DockerImageBuild
