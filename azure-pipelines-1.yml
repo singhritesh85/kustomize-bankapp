@@ -48,7 +48,7 @@ stages:
         containerRegistry: 'Docker-Registry'
         repository: 'samplewebapp'
         command: 'buildAndPush'
-        Dockerfile: '**/Bank-App-Kustomize/Dockerfile-Project-1'
+        Dockerfile: '$(System.DefaultWorkingDirectory)/Bank-App-Kustomize/Dockerfile-Project-1'
         buildContext: '$(System.DefaultWorkingDirectory)/Bank-App-Kustomize'
         tags: '1.0.1'
 - stage: KubernetesDeployment
