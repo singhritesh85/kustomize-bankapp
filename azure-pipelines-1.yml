@@ -41,7 +41,7 @@ stages:
         script: |
           cd $(System.DefaultWorkingDirectory)/Bank-App-Kustomize/
           docker system prune -f --all
-          docker build -t bankappcontainer24registry.azurecr.io/samplewebapp:1.0.1 -f Bank-App-Kustomize/Dockerfile-Project-1 .
+          docker build -t bankappcontainer24registry.azurecr.io/samplewebapp:1.0.1 -f Dockerfile-Project-1 .
           #trivy image --exit-code 0 --severity MEDIUM,HIGH bankappcontainer24registry.azurecr.io/samplewebapp:1.0.1
           #trivy image --exit-code 1 --severity CRITICAL bankappcontainer24registry.azurecr.io/samplewebapp:1.0.1
     - task: Docker@2
