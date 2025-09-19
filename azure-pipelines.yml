@@ -1,8 +1,5 @@
 trigger:
 - none
-branches:
-  include:
-  - dev
 
 pr: none
 pool: 
