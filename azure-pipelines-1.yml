@@ -7,9 +7,6 @@ pool:
   demands:
   - agent.name -equals demo
 
-variables:
-  imagePullSecret: 'bankapp-auth'
-
 stages:
 - stage: "CloneandBuild"
   displayName: CloneandBuild
@@ -20,7 +17,7 @@ stages:
     - checkout: self 
     - script: |
         echo "Cloning the external GitHub repository"
-        git clone -b stage https://$GITACCOUNT_USER:$GITACCOUNT_PAT@github.com/singhritesh85/Bank-App-Kustomize.git
+        git clone -b main https://$GITACCOUNT_USER:$GITACCOUNT_PAT@github.com/singhritesh85/Bank-App-Kustomize.git
     - task: Maven@4
       inputs:
         mavenPomFile: 'Bank-App-Kustomize/pom.xml'
