@@ -1,0 +1,16 @@
+default:
+  tags:
+  - gitlab-runner-1
+
+stages:
+  - deployment_of_mysql_pods_to_gke_cluster
+
+deployment_to_gke:
+  stage: deployment_of_mysql_pods_to_gke_cluster
+  script:
+    - kubectl apply -k overlay/mysql
+    - kubectl get pods -n mysql
+  when: manual
+
+  only:
+    - dev  
