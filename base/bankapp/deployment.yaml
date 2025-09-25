@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: bankapp
-        image: 027330342406.dkr.ecr.us-east-2.amazonaws.com/bankapp:1.0.1
+        image: us-central1-docker.pkg.dev/wise-trainer-244916/bankapp-gcr-dev/dexter:1.0.1
         ports:
         - containerPort: 8080
         resources:
